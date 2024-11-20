@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Student Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-9a6l4I7clPbWV7zACDyRNYVNs/jtKPyW9k/cYzg0z9PZBlv5WXyZ0lP0lJFFzIThisfuaeB4lichesluErcSy6Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ecf0f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #dddddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            color: #555555;
+        }
+        th {
+            background-color: #2ecc71;
+            color: white;
+        }
+        .button-group {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .button-group a, .button-group button {
+            text-decoration: none;
+            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            display: inline-block;
+        }
+        .button-group a:nth-child(1) {
+            background-color: #3498db;
+        }
+        .button-group a:nth-child(2) {
+            background-color: #e67e22;
+        }
+        .button-group a:nth-child(3) {
+            background-color: #9b59b6;
+        }
+        .button-group a:hover {
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .search-bar input[type="text"] {
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            width: 70%;
+        }
+        .search-bar button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #bdc3c7;
+            color: #333;
+        }
+        .search-bar button[type="submit"]:hover {
+            background-color: #ecf0f1;
+        }
+        a.action-button, button.action-button {
+            text-decoration: none;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: inline-flex;
+            align-items: center;
+        }
+        a.action-button.edit {
+            background-color: #2980b9;
+        }
+        a.action-button.delete {
+            background-color: #e74c3c;
+        }
+        a.action-button.edit:hover {
+            background-color: #3498db;
+        }
+        a.action-button.delete:hover {
+            background-color: #c0392b;
+        }
+        a.action-button i {
+            margin-right: 5px;
+        }
+        .fixed-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: white;  /* White background */
+            color: black;             /* Black text */
+            padding: 15px 25px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            font-size: 16px;  /* Font size */
+            font-weight: bold; /* Make the text bold */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .fixed-button:hover {
+            background-color: #2ECC71;
+            color: #ffffff;/* Hover background color */
+            transform: translateY(-3px); /* Slight lift on hover */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Student Manager With Array</h1>
+    <div class="search-bar">
+        <form th:action="@{/array/search}" method="get" style="width: 100%; display: flex; justify-content: center;">
+            <input type="text" name="query" placeholder="Search by name">
+            <button type="submit"><i class="fas fa-search"></i> Search</button>
+        </form>
+    </div>
+    <div class="button-group">
+        <a href="/array/add-student"><i class="fas fa-user-plus"></i> Add Student</a>
+        <a href="/array/sort-students"><i class="fas fa-sort-alpha-down"></i> Sort by Name Length</a>
+        <a href="/array/sort-students-score"><i class="fas fa-sort-numeric-down"></i> Sort by Score</a>
+    </div>
+    <div th:if="${error}" class="error" th:text="${error}" style="color: red; text-align: center;"></div>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Score</th>
+            <th>Rank</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="student : ${students}">
+            <td th:text="${student.id}"></td>
+            <td th:text="${student.studentName}"></td>
+            <td th:text="${student.score}"></td>
+            <td th:text="${student.rank()}"></td>
+            <td>
+                <a th:href="@{/array/update-student(id=${student.id})}" class="action-button edit"><i class="fas fa-edit"></i> Edit</a>
+                <a th:href="@{/array/delete-student(id=${student.id})}" class="action-button delete"><i class="fas fa-trash-alt"></i> Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<button class="fixed-button" onclick="window.location.href='http://localhost:8080/'">
+    Use LinkedList
+</button>
+
+</body>
+</html>
+<button class="fixed-button" onclick="window.location.href='http://localhost:8080/'">
+    Use LinkedList
+</button>
+
+</body>
+</html>
